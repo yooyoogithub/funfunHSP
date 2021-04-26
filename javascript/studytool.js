@@ -1617,7 +1617,6 @@ function sentencegame01routine(notpv){
 
         sl.style.backgroundColor = "rgba(255, 230, 0, 0.712)";
         sl.style.color = "black";
-        EndStudy();
     }
 }
 
