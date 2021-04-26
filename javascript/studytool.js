@@ -1120,7 +1120,7 @@ function wordslearning(notpv){
     repeatcount++;
 
     //이거 없애고 
-    //wordsgame01(notpv); 
+    wordsgame01(notpv); 
 
     // 여기서 부터 건너뛰기
     
@@ -1617,6 +1617,12 @@ function sentencegame01routine(notpv){
 
         sl.style.backgroundColor = "rgba(255, 230, 0, 0.712)";
         sl.style.color = "black";
+
+        examples.innerHTML = `  <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="sentencegame01()">
+                                <input class="realbutton" type="button" id="endstudy" value="스피킹학습" onclick="speakinglearning(${notpv})">
+                                <input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">
+                            `;
+loop++;
     }
 }
 
