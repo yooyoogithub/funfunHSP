@@ -20,6 +20,7 @@ let lang = 'en-US'; //목소리 언어
 let uplistno; //문장게임할때 위 쪽 리스트 넘버
 let downlistno; //문장게임할때 아래 쪽 리스트 넘버
 let answerstrforworsgame01; //단어게임 01에서 정답음성을 출력하기 위해 영어 정답 단어를 담는 변수
+let notpv = false;
 
 speechenglish("none");
 
@@ -816,6 +817,7 @@ function studystart(){
                                     <h3>학습시작</h3>
                                 `;
             //학습 시작
+            notpv = true;
             document.getElementById('sb').setAttribute("onClick","playpv()");
             //주어진 책의 종류에 따른 학습 방식을 표시
         }else{
@@ -847,6 +849,7 @@ function studystart(){
                                     <h3>학습시작</h3>
                                 `;
             //학습시작
+            notpv = true;
             document.getElementById('sb').setAttribute("onClick","playstory()");            
             //주어진 책의 종류에 따른 학습 방식을 표시
         }else{
@@ -1012,7 +1015,8 @@ function playpv(){
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
 
-    wordslearning(0);
+    notpv = false;
+    wordslearning();
 }
 
 function playstory(){
@@ -1022,7 +1026,8 @@ function playstory(){
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
 
-    wordslearning(1);
+    notpv = true;
+    wordslearning();
 
     //typingletters("이것은 테스트 입니다."); //여기에 질문을 넣음.
     //examples.innerHTML = "보기 1,2,3";
@@ -1093,7 +1098,7 @@ function speechenglish(txt){
     }, 4000);*/
 }
 
-function wordslearning(notpv){
+function wordslearning(){
 
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
@@ -1120,7 +1125,7 @@ function wordslearning(notpv){
     repeatcount++;
 
     //이거 없애고 
-    wordsgame01(notpv); 
+    //wordsgame01(); 
 
     // 여기서 부터 건너뛰기
     
@@ -1139,19 +1144,23 @@ function wordslearning(notpv){
 
                 // 문장 플레이할때 "?"는 제거해야 함.
             }
-            examples.innerHTML = `<h1>${studywords[loop][0]}</h1><br>
-                                <h1>${studywords[loop][1]}</h1>`;
-
-            speechenglish(studywords[loop][0]);
+            if(loop >= studywords.length){
+                
+            }else{
+                    examples.innerHTML =    `   <h1>${studywords[loop][0]}</h1><br>
+                                                <h1>${studywords[loop][1]}</h1>
+                                            `;
+                    speechenglish(studywords[loop][0]);
+                    progress(40);
+            }
             //problemaudiosource = `words/eng/${studywords[loop][0]}_eng.mp3`;
             //playquestion();
-            progress(40);
             loop++;
     }, 4000);
     
 }
 
-function wordsgame01(notpv){
+function wordsgame01(){
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
 
@@ -1161,18 +1170,18 @@ function wordsgame01(notpv){
 
     if(studywords.length > 0){
         loop = 0;
-        wordsgame01routine(notpv);
+        wordsgame01routine();
     }else{
         alert("학습할 단어가 없습니다.");
-        examples.innerHTML = `  <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="wordsgame01(${notpv})">
-                                <input class="realbutton" type="button" id="endstudy" value="다음학습" onclick="wordsgame02(${notpv}">
+        examples.innerHTML = `  <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="wordsgame01()">
+                                <input class="realbutton" type="button" id="endstudy" value="다음학습" onclick="wordsgame02()">
                                 <input class="realbutton" type="button" id="endstudy" value="끝내기" onclick="EndStudy()">
                             `;
     }
 
 }
 
-function wordsgame01routine(notpv){
+function wordsgame01routine(){
 
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
@@ -1183,8 +1192,8 @@ function wordsgame01routine(notpv){
 
     if(loop >= studywords.length){
         alert("첫번째 단어의 학습게임이 끝났습니다.");
-        examples.innerHTML = `  <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="wordsgame01(${notpv})">
-                                <input class="realbutton" type="button" id="endstudy" value="다음학습" onclick="wordsgame02(${notpv})">
+        examples.innerHTML = `  <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="wordsgame01()">
+                                <input class="realbutton" type="button" id="endstudy" value="다음학습" onclick="wordsgame02()">
                                 <input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">
                             `;
     }else{
@@ -1254,21 +1263,21 @@ function wordsgame01routine(notpv){
 
         examples.innerHTML = `  <h2>${question_kor}</h2>
                                 <hr>
-                                <button class="smallqbutton" width="200px" height="190px" onclick="wordsgame01answerclick(${answer},1,${notpv})">${q1}</button>
-                                <button class="smallqbutton" width="200px" height="190px" onclick="wordsgame01answerclick(${answer},2,${notpv})">${q2}</button>
+                                <button class="smallqbutton" width="200px" height="190px" onclick="wordsgame01answerclick(${answer},1)">${q1}</button>
+                                <button class="smallqbutton" width="200px" height="190px" onclick="wordsgame01answerclick(${answer},2,)">${q2}</button>
                                 <div></div>
-                                <button class="smallqbutton" width="200px" height="190px" onclick="wordsgame01answerclick(${answer},3,${notpv})">${q3}</button>
-                                <button class="smallqbutton" width="200px" height="190px" onclick="wordsgame01answerclick(${answer},4,${notpv})">${q4}</button>
+                                <button class="smallqbutton" width="200px" height="190px" onclick="wordsgame01answerclick(${answer},3,)">${q3}</button>
+                                <button class="smallqbutton" width="200px" height="190px" onclick="wordsgame01answerclick(${answer},4)">${q4}</button>
                                 <hr>
-                                <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="wordsgame01(${notpv})">
-                                <input class="realbutton" type="button" id="endstudy" value="다음학습" onclick="wordsgame02(${notpv})">
+                                <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="wordsgame01()">
+                                <input class="realbutton" type="button" id="endstudy" value="다음학습" onclick="wordsgame02()">
                                 <input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">
                             `;
         loop++;
     }
 }
 
-function wordsgame01answerclick(answer,useranswer,notpv){
+function wordsgame01answerclick(answer,useranswer){
 
     speechenglish(answerstrforworsgame01);
 
@@ -1278,13 +1287,13 @@ function wordsgame01answerclick(answer,useranswer,notpv){
         correctanswer++;
         document.getElementById('playscore').innerHTML = totalproblem + "개 중 "+correctanswer+"개 정답";
         alert("정답입니다~~^^");
-        wordsgame01routine(notpv);
+        wordsgame01routine();
       }
       else{
         totalproblem++;
         document.getElementById('playscore').innerHTML = totalproblem + "개 중 "+correctanswer+"개 정답";
         alert("아쉬워요, 틀렸어요....ㅠㅠ");
-        wordsgame01routine(notpv);
+        wordsgame01routine();
       }
     }
     else{
@@ -1293,7 +1302,7 @@ function wordsgame01answerclick(answer,useranswer,notpv){
 
 }
 
-function wordsgame02(notpv){
+function wordsgame02(){
 
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
@@ -1304,30 +1313,30 @@ function wordsgame02(notpv){
 
     if(studywords.length > 0){
         loop = 0;
-        wordsgame02routine(notpv);
+        wordsgame02routine();
     }else{
         alert("학습할 단어가 없습니다.");
         EndStudy();
     }
 }
 
-function wordsgame02routine(notpv){
+function wordsgame02routine(){
 
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
 
     if(loop >= studywords.length){
         alert("두번째 단어의 게임이 끝났습니다.");
-        sentencelearning(notpv);
+        sentencelearning();
     }else{
         let strwhole = studywords;
         let str = studywords[loop][1][0];
         let qstr = questionstring(studywords[loop][0][0]);
         examples.innerHTML = `  <h1>${str}</h1><dr>
                                 <h1>${qstr}</h1><dr>
-                                <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="wordsgame02(${notpv})">
-                                <input class="realbutton" type="button" id="endstudy" value="다음" onclick="checkanswer('${studywords[loop][0][0]}',${notpv})">
-                                <input class="realbutton" type="button" id="endstudy" value="문장학습" onclick="sentencelearning(${notpv})">
+                                <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="wordsgame02()">
+                                <input class="realbutton" type="button" id="endstudy" value="다음" onclick="checkanswer('${studywords[loop][0][0]}')">
+                                <input class="realbutton" type="button" id="endstudy" value="문장학습" onclick="sentencelearning()">
                                 <input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">
                             `;
         loop++;
@@ -1335,7 +1344,7 @@ function wordsgame02routine(notpv){
     
 }
 
-function checkanswer(correct, notpv){
+function checkanswer(correct){
 
     //사용자의 정답을 확인
 
@@ -1364,7 +1373,7 @@ function checkanswer(correct, notpv){
     }
 
     wordsanswer.splice(0,wordsanswer.length);
-    wordsgame02routine(notpv);
+    wordsgame02routine();
 }
 
 function questionstring(str){
@@ -1425,7 +1434,7 @@ function questionstring(str){
     return tempstr;
 }
 
-function sentencelearning(notpv){
+function sentencelearning(){
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
     let sl = document.getElementById('sl');
@@ -1449,7 +1458,7 @@ function sentencelearning(notpv){
         }
 
         //아래꺼 한 줄 지울꺼 
-        //sentencegame01(notpv);
+        //sentencegame01();
         // 복원 할것
 
         loop = 0;
@@ -1464,25 +1473,30 @@ function sentencelearning(notpv){
                     // 단어 게임 호출
                     typingletters("문장학습이 끝났습니다. 다시 하시려면 '다시하기'를 다음으로 넘어가려면 '다음'을 누르세요.");
                     if(notpv){
-                        examples.innerHTML = `<input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="sentencelearning(1)"><input class="realbutton" type="button" id="nextstudy" value="다음" onclick="sentencegame01(${notpv})"><input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">`;
+                        examples.innerHTML = `<input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="sentencelearning(1)"><input class="realbutton" type="button" id="nextstudy" value="다음" onclick="sentencegame01()"><input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">`;
                     }else{
-                        examples.innerHTML = `<input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="sentencelearning(0)"><input class="realbutton" type="button" id="endstudy" value="다음" onclick="sentencegame01(${notpv})"><input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">`;
+                        examples.innerHTML = `<input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="sentencelearning(0)"><input class="realbutton" type="button" id="endstudy" value="다음" onclick="sentencegame01()"><input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">`;
                     }
     
                     // 문장 플레이할때 "?"는 제거해야 함.
                 }
-                examples.innerHTML = `<h3>${studysentence[loop][0]}</h3><br>
-                                    <h3>${studysentence[loop][1]}</h3>`;
-    
-                speechpitch = 1;
-                speechrate = 0.6; 
-                speechenglish(studysentence[loop][0]);
-                speechpitch = 1.2;
-                speechrate = 0.8; 
-                //problemaudiosource = `words/eng/${studywords[loop][0]}_eng.mp3`;
-                //playquestion();
-                progress(40);
-                loop++;
+
+                if(loop >= studysentence.length){
+
+                }else{
+                    examples.innerHTML = `<h3>${studysentence[loop][0]}</h3><br>
+                                        <h3>${studysentence[loop][1]}</h3>`;
+        
+                    speechpitch = 1;
+                    speechrate = 0.6; 
+                    speechenglish(studysentence[loop][0]);
+                    speechpitch = 1.2;
+                    speechrate = 0.8; 
+                    //problemaudiosource = `words/eng/${studywords[loop][0]}_eng.mp3`;
+                    //playquestion();
+                    progress(40);
+                    loop++;
+                }
         }, 5000);
 
     }else{
@@ -1496,12 +1510,12 @@ function sentencelearning(notpv){
 
         sl.style.backgroundColor = "rgba(255, 230, 0, 0.712)";
         sl.style.color = "black";
-        EndStudy();
+
     // 여기까지 묶으면 됨.
     }
 }
 
-function sentencegame01(notpv){
+function sentencegame01(){
 
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
@@ -1512,7 +1526,7 @@ function sentencegame01(notpv){
         //Power Voca가 아니라면
         if(studysentence.length>0){
             loop = 0;
-            sentencegame01routine(notpv);
+            sentencegame01routine();
         }
         else{
             alert("공부할 문장이 없습니다.");
@@ -1564,7 +1578,7 @@ function SliceSentence(sentence){
     return slicedsentence;
 }
 
-function sentencegame01routine(notpv){
+function sentencegame01routine(){
 
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
@@ -1603,7 +1617,7 @@ function sentencegame01routine(notpv){
                                 <hr>
                                 <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="sentencegame01()">
                                 <input class="realbutton" type="button" id="endstudy" value="다음" onclick='sentencecheckanswer("${answer}")'>
-                                <input class="realbutton" type="button" id="endstudy" value="스피킹학습" onclick="speakinglearning(${notpv})">
+                                <input class="realbutton" type="button" id="endstudy" value="스피킹학습" onclick="speakinglearning()">
                                 <input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">
                             `;
         loop++;
@@ -1619,10 +1633,10 @@ function sentencegame01routine(notpv){
         sl.style.color = "black";
 
         examples.innerHTML = `  <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="sentencegame01()">
-                                <input class="realbutton" type="button" id="endstudy" value="스피킹학습" onclick="speakinglearning(${notpv})">
+                                <input class="realbutton" type="button" id="endstudy" value="스피킹학습" onclick="speakinglearning()">
                                 <input class="realbutton" type="button" id="endstudy" value="학습마침" onclick="EndStudy()">
                             `;
-loop++;
+        loop++;
     }
 }
 
@@ -1664,8 +1678,7 @@ function sentencecheckanswer(answer){
         }
     }
     else{
-        alert("아직 문제가 출제되지 않았거나, 정답이 정해지지 않았습니다.");
-        EndStudy();
+        alert("아직 문제가 출제되지 않았거나, 정답이 정해지지 않았습니다.");        
     }
 }
 
@@ -1718,7 +1731,7 @@ function sentencegame01add(item){
 
 }
 
-function speakinglearning(notpv){
+function speakinglearning(){
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
 
@@ -1731,11 +1744,6 @@ function speakinglearning(notpv){
     s.style.backgroundColor = "blueviolet";
     s.style.color = "white";
 
-    /*
-    s.style.backgroundColor = "rgba(255, 230, 0, 0.712)";
-    s.style.color = "black";
-    */
-
     if(notpv){
         //Power Voca가 아니면
 
@@ -1747,11 +1755,11 @@ function speakinglearning(notpv){
 
         examples.innerHTML = '<div></div>';
     
-        speakinglearningroutine(notpv);
+        speakinglearningroutine();
 
     }else{
         //Power Voca가 맞으면
-        alert("Power Voca는 문장학습을 지원하지 않습니다.");
+        alert("Power Voca는 스피킹학습을 지원하지 않습니다.");
         let sl = document.getElementById('sl');
         let wl = document.getElementById('wl');
         let s = document.getElementById('s');
@@ -1773,7 +1781,7 @@ function speakinglearning(notpv){
     
 }
 
-function speakinglearningroutine(notpv){
+function speakinglearningroutine(){
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
 
@@ -1792,7 +1800,7 @@ function speakinglearningroutine(notpv){
         examples.innerHTML = `  <h3>${studysentence[loop][0]}</h3><br>
                                 <h3>${studysentence[loop][1]}</h3>
                                 <hr>
-                                <input class="realbutton" type="button" id="startstudy" value="녹음시작" onclick="speakingrecognition(${notpv})">
+                                <input class="realbutton" type="button" id="startstudy" value="녹음시작" onclick="speakingrecognition()">
                                 <hr>
                                 <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="speakinglearning()">
                                 <input class="realbutton" type="button" id="endstudy" value="다음학습" onclick="grammarlearning()">
@@ -1809,7 +1817,6 @@ function speakinglearningroutine(notpv){
     }
 }
 
-
 function speakingrecognition(notpv){
     let question = document.getElementById('question');
     let examples = document.getElementById('examples');
@@ -1821,7 +1828,7 @@ function speakingrecognition(notpv){
     examples.innerHTML = `  <div id="speakingp">_____________________</div><br>
                             <h3>${studysentence[loop-1][1]}</h3>
                             <hr>
-                            <input class="realbutton" type="button" id="startstudy" value="녹음 끝" onclick="speakinglearningroutine(${notpv})">
+                            <input class="realbutton" type="button" id="startstudy" value="녹음 끝" onclick="speakinglearningroutine()">
                             <hr>
                             <input class="realbutton" type="button" id="startstudy" value="다시하기" onclick="speakinglearning()">
                             <input class="realbutton" type="button" id="endstudy" value="다음학습" onclick="grammarlearning()">
